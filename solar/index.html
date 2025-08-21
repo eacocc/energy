@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全球光伏储能系统批发平台 | EACO能源</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2E7D32', // 主绿色
+                        secondary: '#00796B', // 次要绿色
+                        accent: '#03A9F4', // 科技蓝
+                        neutral: '#F5F7FA', // 中性色
+                        'neutral-dark': '#1A202C', // 深色模式中性色
+                        'primary-light': '#4CAF50', // 亮绿色
+                        'eaco': '#00BFA5', // EACO品牌色
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-hover {
+                @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+            }
+            .gradient-overlay {
+                background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 100%);
+            }
+            .style-neutral {
+                --bg-color: #F8FAFC;
+                --text-color: #1E293B;
+                --card-bg: #FFFFFF;
+                --accent-color: #2E7D32;
+            }
+            .style-light {
+                --bg-color: #F0FDF4;
+                --text-color: #064E3B;
+                --card-bg: #FFFFFF;
+                --accent-color: #16A34A;
+            }
+            .style-dark {
+                --bg-color: #0F172A;
+                --text-color: #F8FAFC;
+                --card-bg: #1E293B;
+                --accent-color: #34D399;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-inter style-neutral transition-colors duration-300 bg-[var(--bg-color)] text-[var(--text-color)]">
+    <!-- 顶部通知栏 -->
+    <div class="bg-primary text-white text-center py-2 px-4 text-sm">
+        <p>全球光伏组件批发 | 联系电报推特@eacocc | <span class="hidden md:inline">支持多语言服务</span></p>
+    </div>
+
+    <!-- 导航栏 -->
+    <header class="sticky top-0 z-50 bg-[var(--card-bg)] shadow-md transition-all duration-300">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- 品牌Logo -->
+                <div class="flex items-center space-x-2">
+                    <div class="text-eaco text-3xl">
+                        <i class="fa fa-leaf"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-primary">EACO能源</h1>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">光伏储能解决方案</p>
+                    </div>
+                </div>
+
+                <!-- 导航链接 - 桌面版 -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="font-medium hover:text-primary transition-colors">首页</a>
+                    <a href="#products" class="font-medium hover:text-primary transition-colors">产品</a>
+                    <a href="#markets" class="font-medium hover:text-primary transition-colors">市场</a>
+                    <a href="#prices" class="font-medium hover:text-primary transition-colors">价格</a>
+                    <a href="#eaco" class="font-medium hover:text-primary transition-colors">EACO数字资产</a>
+                    <a href="#contact" class="font-medium hover:text-primary transition-colors">联系我们</a>
+                </nav>
+
+                <!-- 右侧功能区 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 设计风格切换 -->
+                    <div class="relative group">
+                        <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-[var(--card-bg)] shadow-lg rounded-md p-2 hidden group-hover:block">
+                            <button id="style-neutral" class="w-full text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                                <span class="inline-block w-3 h-3 bg-gray-500 rounded-full mr-2"></span>默认风格
+                            </button>
+                            <button id="style-light" class="w-full text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                                <span class="inline-block w-3 h-3 bg-green-300 rounded-full mr-2"></span>明亮风格
+                            </button>
+                            <button id="style-dark" class="w-full text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                                <span class="inline-block w-3 h-3 bg-gray-800 rounded-full mr-2"></span>暗黑风格
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 多语言切换 -->
+                    <div class="relative group">
+                        <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <i class="fa fa-globe"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-64 bg-[var(--card-bg)] shadow-lg rounded-md p-2 hidden group-hover:block max-h-60 overflow-y-auto">
+                            <div class="grid grid-cols-2 gap-1">
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="zh">华语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="en">英语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="hi">印地语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="es">西班牙语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="fr">法语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="ar">阿拉伯语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="bn">孟加拉语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="pt">葡萄牙语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="ru">俄语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="ur">乌尔都语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="sw">斯瓦希里语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="ms">马来语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="ja">日语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="de">德语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="tr">土耳其语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="fa">波斯语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="it">意大利语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="ko">韩语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="nl">荷兰语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="vi">越南语</button>
+                                <button class="language-btn text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800" data-lang="id">印尼语</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 移动端菜单按钮 -->
+                    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="md:hidden hidden bg-[var(--card-bg)] border-t">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="#home" class="py-2 font-medium hover:text-primary transition-colors">首页</a>
+                <a href="#products" class="py-2 font-medium hover:text-primary transition-colors">产品</a>
+                <a href="#markets" class="py-2 font-medium hover:text-primary transition-colors">市场</a>
+                <a href="#prices" class="py-2 font-medium hover:text-primary transition-colors">价格</a>
+                <a href="#eaco" class="py-2 font-medium hover:text-primary transition-colors">EACO数字资产</a>
+                <a href="#contact" class="py-2 font-medium hover:text-primary transition-colors">联系我们</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero区域 -->
+        <section id="home" class="relative h-[80vh] min-h-[600px] flex items-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="https://picsum.photos/id/1015/1920/1080" alt="太阳能光伏电站全景" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+            </div>
+            
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="max-w-3xl">
+                    <h1 class="text-[clamp(2rem,5vw,4rem)] font-bold text-white leading-tight text-shadow mb-6">
+                        全球光伏储能系统<br>
+                        <span class="text-eaco">批发解决方案</span>
+                    </h1>
+                    <p class="text-[clamp(1rem,2vw,1.25rem)] text-gray-100 mb-8 max-w-2xl">
+                        提供高品质太阳能组件、逆变器和储能系统，服务东南亚、中东、非洲等全球市场，助力清洁能源革命。
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#products" class="bg-primary hover:bg-primary/90 text-white font-medium px-6 py-3 rounded-lg transition-all shadow-lg hover:shadow-xl">
+                            浏览产品
+                        </a>
+                        <a href="#contact" class="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border border-white/30 font-medium px-6 py-3 rounded-lg transition-all">
+                            联系我们
+                        </a>
+                    </div>
+                    
+                    <div class="mt-12 flex items-center space-x-4">
+                        <div class="flex -space-x-2">
+                            <img src="https://picsum.photos/id/1001/100/100" alt="客户头像" class="w-10 h-10 rounded-full border-2 border-white">
+                            <img src="https://picsum.photos/id/1002/100/100" alt="客户头像" class="w-10 h-10 rounded-full border-2 border-white">
+                            <img src="https://picsum.photos/id/1003/100/100" alt="客户头像" class="w-10 h-10 rounded-full border-2 border-white">
+                            <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center border-2 border-white text-xs font-bold">
+                                99+
+                            </div>
+                        </div>
+                        <div class="text-white">
+                            <div class="flex items-center mb-1">
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <span class="ml-2 font-medium">4.9/5</span>
+                            </div>
+                            <p class="text-sm text-gray-200">来自全球100+客户的好评</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="absolute bottom-0 left-0 right-0 h-24 gradient-overlay"></div>
+        </section>
+
+        <!-- 主要市场区域 -->
+        <section class="py-16 bg-[var(--bg-color)]">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4">我们的主要市场</h2>
+                    <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                        专注于新兴光伏市场，为东南亚、中东、非洲等地区提供优质的太阳能产品和解决方案
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- 东南亚市场 -->
+                    <div class="bg-[var(--card-bg)] rounded-xl overflow-hidden shadow-md card-hover">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://picsum.photos/id/1036/800/600" alt="东南亚光伏市场" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <i class="fa fa-map-marker text-primary text-xl mr-2"></i>
+                                <h3 class="text-xl font-bold">东南亚市场</h3>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                覆盖印度尼西亚、泰国、新加坡、越南、马来西亚等国家，提供定制化光伏解决方案。
+                            </p>
+                            <a href="#" class="text-primary font-medium inline-flex items-center hover:underline">
+                                了解更多 <i class="fa fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- 中东市场 -->
+                    <div class="bg-[var(--card-bg)] rounded-xl overflow-hidden shadow-md card-hover">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://picsum.photos/id/1039/800/600" alt="中东光伏市场" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <i class="fa fa-map-marker text-primary text-xl mr-2"></i>
+                                <h3 class="text-xl font-bold">中东市场</h3>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                利用丰富的太阳能资源，为中东地区提供高效光伏组件和储能系统，助力能源转型。
+                            </p>
+                            <a href="#" class="text-primary font-medium inline-flex items-center hover:underline">
+                                了解更多 <i class="fa fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- 非洲市场 -->
+                    <div class="bg-[var(--card-bg)] rounded-xl overflow-hidden shadow-md card-hover">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://picsum.photos/id/1058/800/600" alt="非洲光伏市场" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <i class="fa fa-map-marker text-primary text-xl mr-2"></i>
+                                <h3 class="text-xl font-bold">非洲市场</h3>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                参与非洲多国光伏项目建设，提供可靠的太阳能产品，支持当地能源基础设施发展。
+                            </p>
+                            <a href="#" class="text-primary font-medium inline-flex items-center hover:underline">
+                                了解更多 <i class="fa fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 产品展示区域 -->
+        <section id="products" class="py-16 bg-gradient-to-b from-[var(--bg-color)] to-[var(--card-bg)]">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4">我们的产品</h2>
+                    <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                        提供全球知名品牌的光伏组件、逆变器及相关设备，确保高品质和可靠性
+                    </p>
+                </div>
+                
+                <!-- 产品分类标签 -->
+                <div class="flex flex-wrap justify-center gap-4 mb-10">
+                    <button class="product-tab active px-6 py-2 rounded-full bg-primary text-white font-medium" data-tab="modules">
+                        光伏组件
+                    </button>
+                    <button class="product-tab px-6 py-2 rounded-full bg-gray-200 dark:bg-gray-700 font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" data-tab="inverters">
+                        逆变器
+                    </button>
+                    <button class="product-tab px-6 py-2 rounded-full bg-gray-200 dark:bg-gray-700 font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" data-tab="storage">
+                        储能系统
+                    </button>
+                    <button class="product-tab px-6 py-2 rounded-full bg-gray-200 dark:bg-gray-700 font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" data-tab="accessories">
+                        配件
+                    </button>
+                </div>
+                
+                <!-- 光伏组件产品 -->
+                <div id="modules-tab" class="product-content block">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                        <!-- 隆基 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-sun-o text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">隆基</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">高效光伏组件</p>
+                        </div>
+                        
+                        <!-- 天合 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-sun-o text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">天合</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">高效光伏组件</p>
+                        </div>
+                        
+                        <!-- 晶澳 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-sun-o text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">晶澳</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">高效光伏组件</p>
+                        </div>
+                        
+                        <!-- 晶科 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-sun-o text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">晶科</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">高效光伏组件</p>
+                        </div>
+                        
+                        <!-- 阿特斯 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-sun-o text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">阿特斯</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">高效光伏组件</p>
+                        </div>
+                        
+                        <!-- 中环 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-sun-o text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">中环</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">高效光伏组件</p>
+                        </div>
+                        
+                        <!-- 正泰 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-sun-o text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">正泰</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">高效光伏组件</p>
+                        </div>
+                        
+                        <!-- 中节能 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-sun-o text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">中节能</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">高效光伏组件</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 逆变器产品 -->
+                <div id="inverters-tab" class="product-content hidden">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                        <!-- 华为 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-bolt text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">华为</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">智能逆变器</p>
+                        </div>
+                        
+                        <!-- 阳光 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-bolt text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">阳光</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">高效逆变器</p>
+                        </div>
+                        
+                        <!-- 锦浪 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-bolt text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">锦浪</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">并网逆变器</p>
+                        </div>
+                        
+                        <!-- 固德威 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-bolt text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">固德威</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">光伏逆变器</p>
+                        </div>
+                        
+                        <!-- 瓦特 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-bolt text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">瓦特</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">逆变器系统</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 储能系统 -->
+                <div id="storage-tab" class="product-content hidden">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
+                        <!-- 5KW储能系统 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-battery-full text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">5KW储能系统</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">家用/小型商用</p>
+                        </div>
+                        
+                        <!-- 10KW储能系统 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-battery-full text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">10KW储能系统</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">商用/工业用</p>
+                        </div>
+                        
+                        <!-- 15KW储能系统 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-battery-full text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">15KW储能系统</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">工业/小型电站</p>
+                        </div>
+                        
+                        <!-- 可移动式光伏储能 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-truck text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">可移动式光伏</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">房车/便携式</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 配件 -->
+                <div id="accessories-tab" class="product-content hidden">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
+                        <!-- 光伏支架 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-cubes text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">光伏支架</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">各类安装系统</p>
+                        </div>
+                        
+                        <!-- 线缆 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-plug text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">光伏线缆</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">高效传输线缆</p>
+                        </div>
+                        
+                        <!-- 连接器 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-link text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">连接器</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">光伏系统连接器</p>
+                        </div>
+                        
+                        <!-- 监控系统 -->
+                        <div class="bg-[var(--card-bg)] rounded-lg p-4 text-center shadow-sm card-hover">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-neutral dark:bg-neutral-dark rounded-full flex items-center justify-center">
+                                <i class="fa fa-line-chart text-4xl text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">监控系统</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">光伏性能监控</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 价格更新区域 -->
+        <section id="prices" class="py-16 bg-[var(--bg-color)]">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4">实时价格更新</h2>
+                    <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                        每小时更新全球光伏组件、逆变器、储能电池等产品价格，数据来源于各API接口
+                    </p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                        上次更新: <span id="last-update">加载中...</span>
+                    </p>
+                </div>
+                
+                <div class="bg-[var(--card-bg)] rounded-xl shadow-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+                                    <th class="py-4 px-6 text-left font-semibold">产品类型</th>
+                                    <th class="py-4 px-6 text-left font-semibold">品牌/型号</th>
+                                    <th class="py-4 px-6 text-left font-semibold">规格</th>
+                                    <th class="py-4 px-6 text-left font-semibold">价格 (CNH)</th>
+                                    <th class="py-4 px-6 text-left font-semibold">价格 (USDT)</th>
+                                    <th class="py-4 px-6 text-left font-semibold">数据来源</th>
+                                    <th class="py-4 px-6 text-left font-semibold">更新时间</th>
+                                </tr>
+                            </thead>
+                            <tbody id="price-table-body">
+                                <!-- 价格数据将通过JavaScript动态加载 -->
+                                <tr>
+                                    <td colspan="7" class="py-8 text-center text-gray-500">
+                                        <i class="fa fa-circle-o-notch fa-spin mr-2"></i> 加载价格数据中...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- 价格趋势图表 -->
+                <div class="mt-12 bg-[var(--card-bg)] rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-6">光伏组件价格趋势 (30天)</h3>
+                    <div class="h-80">
+                        <canvas id="price-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EACO数字资产区域 -->
+        <section id="eaco" class="py-16 bg-gradient-to-b from-[var(--card-bg)] to-[var(--bg-color)]">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4">EACO数字资产</h2>
+                    <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                        EACO (Earth's Best Coin) 是连接全球能源贸易的数字资产，支持光伏储能系统跨境交易
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- EACO价格信息 -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-[var(--card-bg)] rounded-xl shadow-lg p-6 h-full">
+                            <div class="flex items-center mb-6">
+                                <div class="w-12 h-12 rounded-full bg-eaco flex items-center justify-center mr-4">
+                                    <span class="text-white font-bold text-xl">E</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold">EACO 价格</h3>
+                                    <p class="text-gray-500 dark:text-gray-400">实时市场数据</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <div class="text-4xl font-bold mb-2" id="eaco-price">--</div>
+                                <div class="flex items-center">
+                                    <span id="eaco-change" class="px-2 py-1 rounded text-sm font-medium">--</span>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">过去24小时</span>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">EACO/CNH</span>
+                                        <span class="text-sm font-medium" id="eaco-cnh">--</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div class="bg-eaco h-2 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">EACO/USDT</span>
+                                        <span class="text-sm font-medium" id="eaco-usdt">--</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div class="bg-eaco h-2 rounded-full" style="width: 65%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">EACO/USDC</span>
+                                        <span class="text-sm font-medium" id="eaco-usdc">--</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div class="bg-eaco h-2 rounded-full" style="width: 60%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8">
+                                <button class="w-full bg-eaco hover:bg-eaco/90 text-white font-medium py-3 rounded-lg transition-colors">
+                                    连接钱包
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- EACO兑换交易区 -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-[var(--card-bg)] rounded-xl shadow-lg p-6 h-full">
+                            <h3 class="text-xl font-bold mb-6">EACO 兑换交易</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <!-- 输入部分 -->
+                                <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <label class="font-medium">从</label>
+                                        <button class="flex items-center text-primary">
+                                            <span>选择资产</span>
+                                            <i class="fa fa-chevron-down ml-2 text-xs"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <input type="text" placeholder="0.00" class="w-full bg-transparent border-none text-2xl font-bold focus:outline-none" value="1.00">
+                                    </div>
+                                    
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-full bg-eaco flex items-center justify-center mr-2">
+                                            <span class="text-white text-xs font-bold">E</span>
+                                        </div>
+                                        <span>EACO</span>
+                                        <span class="ml-auto text-sm text-gray-500 dark:text-gray-400">余额: 100.00</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 输出部分 -->
+                                <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <label class="font-medium">到</label>
+                                        <button class="flex items-center text-primary">
+                                            <span>选择资产</span>
+                                            <i class="fa fa-chevron-down ml-2 text-xs"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <input type="text" placeholder="0.00" class="w-full bg-transparent border-none text-2xl font-bold focus:outline-none" id="output-amount" value="0.00">
+                                    </div>
+                                    
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center mr-2">
+                                            <span class="text-white text-xs font-bold">U</span>
+                                        </div>
+                                        <span>USDT</span>
+                                        <span class="ml-auto text-sm text-gray-500 dark:text-gray-400">余额: 500.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button id="swap-button" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 rounded-lg transition-colors">
+                                兑换
+                            </button>
+                            
+                            <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                                <h4 class="font-medium mb-4">市场数据来源</h4>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                    <div class="flex items-center p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                                        <i class="fa fa-exchange text-primary mr-2"></i>
+                                        <span class="text-sm">Meteora (E-USDT)</span>
+                                    </div>
+                                    <div class="flex items-center p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                                        <i class="fa fa-exchange text-primary mr-2"></i>
+                                        <span class="text-sm">Orca (E-USDC)</span>
+                                    </div>
+                                    <div class="flex items-center p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                                        <i class="fa fa-exchange text-primary mr-2"></i>
+                                        <span class="text-sm">Raydium (E-SOL)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 市场分析文章 -->
+        <section id="markets" class="py-16 bg-[var(--bg-color)]">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4">市场分析与资讯</h2>
+                    <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                        了解全球光伏储能市场动态、政策法规和技术趋势
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- 文章1 -->
+                    <article class="bg-[var(--card-bg)] rounded-xl overflow-hidden shadow-md card-hover">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://picsum.photos/id/1043/800/600" alt="非洲光伏市场" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
+                                <span class="flex items-center"><i class="fa fa-calendar-o mr-1"></i> 2023-06-15</span>
+                                <span class="mx-2">•</span>
+                                <span class="flex items-center"><i class="fa fa-folder-o mr-1"></i> 市场分析</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">如何发展非洲的光伏储能市场？</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
+                                非洲拥有丰富的太阳能资源和巨大的能源需求，光伏储能系统在非洲市场的发展潜力巨大...
+                            </p>
+                            <a href="https://mp.weixin.qq.com/s/juM_80vEpSMzX1uQlYPjzQ" target="_blank" class="text-primary font-medium inline-flex items-center hover:underline">
+                                阅读全文 <i class="fa fa-external-link ml-2"></i>
+                            </a>
+                        </div>
+                    </article>
+                    
+                    <!-- 文章2 -->
+                    <article class="bg-[var(--card-bg)] rounded-xl overflow-hidden shadow-md card-hover">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://picsum.photos/id/1051/800/600" alt="太阳资源国家" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
+                                <span class="flex items-center"><i class="fa fa-calendar-o mr-1"></i> 2023-05-28</span>
+                                <span class="mx-2">•</span>
+                                <span class="flex items-center"><i class="fa fa-folder-o mr-1"></i> 行业研究</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">地球上太阳资源最好的20个国家有哪些</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
+                                太阳能资源的分布与地理位置密切相关，了解全球太阳资源最丰富的国家，有助于光伏项目的规划和投资...
+                            </p>
+                            <a href="https://mp.weixin.qq.com/s/dNSwIGqOSNrJZpLxHYh20w" target="_blank" class="text-primary font-medium inline-flex items-center hover:underline">
+                                阅读全文 <i class="fa fa-external-link ml-2"></i>
+                            </a>
+                        </div>
+                    </article>
+                    
+                    <!-- 文章3 -->
+                    <article class="bg-[var(--card-bg)] rounded-xl overflow-hidden shadow-md card-hover">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://picsum.photos/id/1059/800/600" alt="可移动式光伏" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
+                                <span class="flex items-center"><i class="fa fa-calendar-o mr-1"></i> 2023-06-02</span>
+                                <span class="mx-2">•</span>
+                                <span class="flex items-center"><i class="fa fa-folder-o mr-1"></i> 技术趋势</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">可移动式光伏的未来发展前景</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
+                                房车光伏、插拔式光伏等可移动式光伏系统正在成为新的增长点，其灵活性和便携性受到市场青睐...
+                            </p>
+                            <a href="https://mp.weixin.qq.com/s/YGWCWmD-RapT9iribM37rw" target="_blank" class="text-primary font-medium inline-flex items-center hover:underline">
+                                阅读全文 <i class="fa fa-external-link ml-2"></i>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+                
+                <div class="text-center mt-10">
+                    <a href="#" class="inline-flex items-center font-medium text-primary hover:underline">
+                        查看更多市场资讯 <i class="fa fa-long-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系我们 -->
+        <section id="contact" class="py-16 bg-gradient-to-b from-[var(--bg-color)] to-[var(--card-bg)]">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <div class="text-center mb-12">
+                        <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4">联系我们</h2>
+                        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                            无论您有任何疑问或需求，我们的专业团队将为您提供及时的支持和服务
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- 联系信息 -->
+                        <div class="bg-[var(--card-bg)] rounded-xl shadow-lg p-6 lg:p-8">
+                            <h3 class="text-xl font-bold mb-6">联系方式</h3>
+                            
+                            <div class="space-y-6">
+                                <div class="flex items-start">
+                                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
+                                        <i class="fa fa-weixin text-primary"></i>电报/推特</div>
+                                    <div>
+                                      <p class="text-gray-600 dark:text-gray-400">@eacocc</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
+                                        <i class="fa fa-envelope text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium mb-1">邮箱</h4>
+                                        <p class="text-gray-600 dark:text-gray-400">eaco2cc@gmail.com</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
+                                        <i class="fa fa-globe text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium mb-1">服务地区</h4>
+                                        <p class="text-gray-600 dark:text-gray-400">东南亚、中亚中东、非洲、全球</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8">
+                                <h4 class="font-medium mb-4">EACO社区</h4>
+                                <div class="flex flex-wrap gap-4">
+                                    <a href="https://t.me/aieaco" target="_blank" class="flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                                        <i class="fa fa-telegram mr-2"></i>
+                                        <span>华语社区</span>
+                                    </a>
+                                    <a href="https://t.me/e_eacocc" target="_blank" class="flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                                        <i class="fa fa-telegram mr-2"></i>
+                                        <span>英文社区</span>
+                                    </a>
+                                    <a href="https://t.me/eacoespanish" target="_blank" class="flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                                        <i class="fa fa-telegram mr-2"></i>
+                                        <span>西班牙语</span>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8">
+                                <h4 class="font-medium mb-4">支持的支付方式</h4>
+                                <div class="flex flex-wrap gap-3">
+                                    <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm">eaco</span>
+                                    <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm">eac</span>
+                                    <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm">doge</span>
+                                    <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm">CNH</span>
+                                    <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm">USDT</span>
+                                    <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm">USDC(sol)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 联系表单 -->
+                        <div class="bg-[var(--card-bg)] rounded-xl shadow-lg p-6 lg:p-8">
+                            <h3 class="text-xl font-bold mb-6">发送询价</h3>
+                            
+                            <form id="contact-form" class="space-y-4">
+                                <div>
+                                    <label for="name" class="block text-sm font-medium mb-1">姓名</label>
+                                    <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-transparent focus:outline-none focus:ring-2 focus:ring-primary">
+                                </div>
+                                
+                                <div>
+                                    <label for="email" class="block text-sm font-medium mb-1">邮箱</label>
+                                    <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-transparent focus:outline-none focus:ring-2 focus:ring-primary">
+                                </div>
+                                
+                                <div>
+                                    <label for="country" class="block text-sm font-medium mb-1">所在国家/地区</label>
+                                    <select id="country" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-transparent focus:outline-none focus:ring-2 focus:ring-primary">
+                                        <option value="">请选择国家/地区</option>
+                                        <option value="seasia">东南亚国家</option>
+                                        <option value="middleeast">中东地区</option>
+                                        <option value="africa">非洲国家</option>
+                                        <option value="europe">欧洲国家</option>
+                                        <option value="america">美洲国家</option>
+                                        <option value="other">其他地区</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label for="product" class="block text-sm font-medium mb-1">感兴趣的产品</label>
+                                    <select id="product" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-transparent focus:outline-none focus:ring-2 focus:ring-primary">
+                                        <option value="">请选择产品</option>
+                                        <option value="modules">光伏组件</option>
+                                        <option value="inverters">逆变器</option>
+                                        <option value="storage">储能系统</option>
+                                        <option value="accessories">配件</option>
+                                        <option value="other">其他产品</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label for="message" class="block text-sm font-medium mb-1">留言内容</label>
+                                    <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-transparent focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+                                </div>
+                                
+                                <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 rounded-lg transition-colors">
+                                    发送询价
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <!-- 公司信息 -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <div class="text-eaco text-3xl">
+                            <i class="fa fa-leaf"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">EACO能源</h3>
+                            <p class="text-xs text-gray-400">光伏储能解决方案</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-400 mb-6">
+                        专注于全球光伏储能系统批发，为东南亚、中东、非洲等地区提供高品质产品和服务。
+                    </p>
+                    
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-eaco transition-colors">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-eaco transition-colors">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-eaco transition-colors">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-eaco transition-colors">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 快速链接 -->
+                <div>
+                    <h4 class="text-lg font-bold mb-6">快速链接</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+                        <li><a href="#products" class="text-gray-400 hover:text-white transition-colors">产品</a></li>
+                        <li><a href="#markets" class="text-gray-400 hover:text-white transition-colors">市场分析</a></li>
+                        <li><a href="#prices" class="text-gray-400 hover:text-white transition-colors">价格更新</a></li>
+                        <li><a href="#eaco" class="text-gray-400 hover:text-white transition-colors">EACO数字资产</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors">联系我们</a></li>
+                    </ul>
+                </div>
+                
+                <!-- 市场区域 -->
+                <div>
+                    <h4 class="text-lg font-bold mb-6">主要市场</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">东南亚市场</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">中东市场</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">非洲市场</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">中亚市场</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">欧洲市场</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">美洲市场</a></li>
+                    </ul>
+                </div>
+                
+                <!-- EACO社区与生态 -->
+                <div>
+                    <h4 class="text-lg font-bold mb-6">EACO社区与生态</h4>
+                    <ul class="space-y-3">
+                        <li><a href="https://linktr.ee/web3eaco" target="_blank" class="text-gray-400 hover:text-white transition-colors">EACO生态</a></li>
+                        <li><a href="https://solscan.io/token/DqfoyZH96RnvZusSp3Cdncjpyp3C74ZmJzGhjmHnDHRH" target="_blank" class="text-gray-400 hover:text-white transition-colors">Solscan</a></li>
+                        <li><a href="https://linktr.ee/eacocc" target="_blank" class="text-gray-400 hover:text-white transition-colors">EACO链接</a></li>
+                        <li><a href="https://x.com/eacocc" target="_blank" class="text-gray-400 hover:text-white transition-colors">X平台</a></li>
+                        <li><a href="https://github.com/eacocc/EACO_Exchange_DApp" target="_blank" class="text-gray-400 hover:text-white transition-colors">E swap</a></li>
+                        <li><a href="https://app--e21-web3-love-public-welfare-2edfc138.base44.app/HelpCNH" target="_blank" class="text-gray-400 hover:text-white transition-colors">EACO公益</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 中医教育链接 -->
+            <div class="mb-8 pt-8 border-t border-gray-800">
+                <a href="https://app--eaco-tcm-ai-f32fa3b1.base44.app/TCMEducation" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                    中医教育: https://app--eaco-tcm-ai-f32fa3b1.base44.app/TCMEducation
+                </a>
+            </div>
+            
+            <!-- 免责声明 -->
+            <div class="text-gray-500 text-sm mb-6">
+                <p>所有光伏储能能源等信息仅供参考，以实际实物交易为准，只使用CNH离岸人民币，为了安全不使用CNY人民币字样，解释权归 eaco21外贸小组。</p>
+                <p class="mt-2">重要免责声明：本光伏储能价格工具生成的任何内容均由eaco+AI+光伏储能等基于算法提供，（如有侵权，请告知，eaco2cc@gmail.com，3-30个工作日内回复处理)仅供学习和参考交流，随时升级优化完善到地球村最高的正能量状态。</p>
+            </div>
+            
+            <!-- 版权信息 -->
+            <div class="text-center text-gray-600 text-sm pt-6 border-t border-gray-800">
+                <p>© 2025 EACO能源. 保留所有权利.</p>
+                <p class="mt-1">EACO is Earth’s best friend; $e=$eaco.计算劳动价值，量化地球资源;</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 多语言支持
+        const translations = {
+            en: {
+                home: "Home",
+                products: "Products",
+                markets: "Markets",
+                prices: "Prices",
+                eaco: "EACO Token",
+                contact: "Contact",
+                // 更多翻译...
+            },
+            // 其他语言翻译...
+        };
+        
+        // 当前语言
+        let currentLang = 'zh';
+        
+        // 语言切换
+        document.querySelectorAll('.language-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                currentLang = lang;
+                updateLanguage();
+            });
+        });
+        
+        function updateLanguage() {
+            // 这里会根据当前语言更新页面内容
+            // 简化实现，实际项目中需要更完善的翻译逻辑
+            if (currentLang !== 'zh' && translations[currentLang]) {
+                document.querySelectorAll('a[href="#home"]').forEach(el => {
+                    el.textContent = translations[currentLang].home;
+                });
+                document.querySelectorAll('a[href="#products"]').forEach(el => {
+                    el.textContent = translations[currentLang].products;
+                });
+                document.querySelectorAll('a[href="#markets"]').forEach(el => {
+                    el.textContent = translations[currentLang].markets;
+                });
+                document.querySelectorAll('a[href="#prices"]').forEach(el => {
+                    el.textContent = translations[currentLang].prices;
+                });
+                document.querySelectorAll('a[href="#eaco"]').forEach(el => {
+                    el.textContent = translations[currentLang].eaco;
+                });
+                document.querySelectorAll('a[href="#contact"]').forEach(el => {
+                    el.textContent = translations[currentLang].contact;
+                });
+            } else {
+                // 恢复中文
+                document.querySelectorAll('a[href="#home"]').forEach(el => {
+                    el.textContent = "首页";
+                });
+                document.querySelectorAll('a[href="#products"]').forEach(el => {
+                    el.textContent = "产品";
+                });
+                document.querySelectorAll('a[href="#markets"]').forEach(el => {
+                    el.textContent = "市场";
+                });
+                document.querySelectorAll('a[href="#prices"]').forEach(el => {
+                    el.textContent = "价格";
+                });
+                document.querySelectorAll('a[href="#eaco"]').forEach(el => {
+                    el.textContent = "EACO数字资产";
+                });
+                document.querySelectorAll('a[href="#contact"]').forEach(el => {
+                    el.textContent = "联系我们";
+                });
+            }
+        }
+        
+        // 设计风格切换
+        document.getElementById('style-neutral').addEventListener('click', function() {
+            document.body.classList.remove('style-light', 'style-dark');
+            document.body.classList.add('style-neutral');
+        });
+        
+        document.getElementById('style-light').addEventListener('click', function() {
+            document.body.classList.remove('style-neutral', 'style-dark');
+            document.body.classList.add('style-light');
+        });
+        
+        document.getElementById('style-dark').addEventListener('click', function() {
+            document.body.classList.remove('style-neutral', 'style-light');
+            document.body.classList.add('style-dark');
+        });
+        
+        // 移动端菜单
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // 产品标签切换
+        document.querySelectorAll('.product-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有标签的活跃状态
+                document.querySelectorAll('.product-tab').forEach(t => {
+                    t.classList.remove('active', 'bg-primary', 'text-white');
+                    t.classList.add('bg-gray-200', 'dark:bg-gray-700', 'hover:bg-gray-300', 'dark:hover:bg-gray-600');
+                });
+                
+                // 设置当前标签为活跃状态
+                this.classList.add('active', 'bg-primary', 'text-white');
+                this.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'hover:bg-gray-300', 'dark:hover:bg-gray-600');
+                
+                // 隐藏所有内容
+                document.querySelectorAll('.product-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                
+                
+                // 显示对应内容
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.remove('hidden');
+            });
+        });
+        
+        // 模拟价格数据
+        const priceData = [
+            {
+                type: "光伏组件",
+                brand: "隆基",
+                spec: "550W 单晶硅",
+                priceCNH: 1350.00,
+                priceUSDT: 185.00,
+                source: "PV InfoLink DataFactory",
+                time: "2023-06-20 10:30"
+            },
+            {
+                type: "光伏组件",
+                brand: "天合",
+                spec: "540W 单晶硅",
+                priceCNH: 1320.00,
+                priceUSDT: 181.00,
+                source: "PV InfoLink DataFactory",
+                time: "2023-06-20 10:30"
+            },
+            {
+                type: "逆变器",
+                brand: "华为",
+                spec: "10KW 并网型",
+                priceCNH: 8900.00,
+                priceUSDT: 1225.00,
+                source: "EnergySage API",
+                time: "2023-06-20 09:15"
+            },
+            {
+                type: "逆变器",
+                brand: "阳光",
+                spec: "5KW 并网型",
+                priceCNH: 4500.00,
+                priceUSDT: 618.00,
+                source: "EnergySage API",
+                time: "2023-06-20 09:15"
+            },
+            {
+                type: "储能电池",
+                brand: "宁德时代",
+                spec: "10KWh 锂电池",
+                priceCNH: 12500.00,
+                priceUSDT: 1720.00,
+                source: "Battery Status API",
+                time: "2023-06-20 11:45"
+            },
+            {
+                type: "光伏支架",
+                brand: "中建材",
+                spec: "铝合金 屋顶式",
+                priceCNH: 180.00,
+                priceUSDT: 24.70,
+                source: "阿里巴巴国际站 OpenAPI",
+                time: "2023-06-20 08:30"
+            },
+            {
+                type: "线缆",
+                brand: "亨通",
+                spec: "4mm² 光伏专用",
+                priceCNH: 8.50,
+                priceUSDT: 1.16,
+                source: "阿里巴巴国际站 OpenAPI",
+                time: "2023-06-20 08:30"
+            }
+        ];
+        
+        // 更新价格表格
+        function updatePriceTable() {
+            const tableBody = document.getElementById('price-table-body');
+            tableBody.innerHTML = '';
+            
+            priceData.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors';
+                
+                row.innerHTML = `
+                    <td class="py-4 px-6">${item.type}</td>
+                    <td class="py-4 px-6">${item.brand}</td>
+                    <td class="py-4 px-6">${item.spec}</td>
+                    <td class="py-4 px-6 font-medium">${item.priceCNH.toFixed(2)}</td>
+                    <td class="py-4 px-6 font-medium">${item.priceUSDT.toFixed(2)}</td>
+                    <td class="py-4 px-6">${item.source}</td>
+                    <td class="py-4 px-6 text-sm text-gray-500 dark:text-gray-400">${item.time}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // 更新最后更新时间
+            const now = new Date();
+            document.getElementById('last-update').textContent = now.toLocaleString();
+        }
+        
+        // 初始化价格图表
+        function initPriceChart() {
+            const ctx = document.getElementById('price-chart').getContext('2d');
+            
+            // 模拟30天价格数据
+            const labels = Array.from({length: 30}, (_, i) => {
+                const date = new Date();
+                date.setDate(date.getDate() - 29 + i);
+                return `${date.getMonth() + 1}/${date.getDate()}`;
+            });
+            
+            const longiData = Array.from({length: 30}, () => 1300 + Math.random() * 100);
+            const trinaData = Array.from({length: 30}, () => 1280 + Math.random() * 90);
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '隆基 550W',
+                            data: longiData,
+                            borderColor: '#2E7D32',
+                            backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: '天合 540W',
+                            data: trinaData,
+                            borderColor: '#03A9F4',
+                            backgroundColor: 'rgba(3, 169, 244, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: '价格 (CNH)'
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    }
+                }
+            });
+        }
+        
+        // 模拟EACO价格数据
+        function updateEACOPrice() {
+            // 生成随机价格（模拟API数据）
+            const basePrice = 0.25;
+            const randomChange = (Math.random() - 0.5) * 0.05;
+            const eacoPrice = basePrice + randomChange;
+            
+            // 计算24小时变化百分比
+            const changePercent = (Math.random() - 0.3) * 5; // 偏向于小幅上涨
+            
+            // 更新价格显示
+            document.getElementById('eaco-price').textContent = eacoPrice.toFixed(4) + ' USDT';
+            
+            // 更新变化百分比
+            const changeEl = document.getElementById('eaco-change');
+            changeEl.textContent = (changePercent > 0 ? '+' : '') + changePercent.toFixed(2) + '%';
+            
+            // 设置颜色（上涨为绿色，下跌为红色）
+            if (changePercent > 0) {
+                changeEl.classList.remove('bg-red-100', 'text-red-800');
+                changeEl.classList.add('bg-green-100', 'text-green-800');
+            } else {
+                changeEl.classList.remove('bg-green-100', 'text-green-800');
+                changeEl.classList.add('bg-red-100', 'text-red-800');
+            }
+            
+            // 更新其他货币价格
+            const cnhRate = 7.25; // 假设汇率
+            document.getElementById('eaco-cnh').textContent = (eacoPrice * cnhRate).toFixed(2) + ' CNH';
+            document.getElementById('eaco-usdt').textContent = eacoPrice.toFixed(4) + ' USDT';
+            document.getElementById('eaco-usdc').textContent = eacoPrice.toFixed(4) + ' USDC';
+            
+            // 更新兑换计算
+            document.getElementById('output-amount').value = eacoPrice.toFixed(4);
+        }
+        
+        // 模拟API轮询更新价格
+        function startPriceUpdates() {
+            // 初始更新
+            updatePriceTable();
+            updateEACOPrice();
+            
+            // 每小时更新一次价格（实际项目中可以设置更短的间隔）
+            setInterval(() => {
+                updatePriceTable();
+                updateEACOPrice();
+            }, 3600000); // 3600000毫秒 = 1小时
+            
+            // 每5分钟更新一次EACO价格
+            setInterval(updateEACOPrice, 300000); // 300000毫秒 = 5分钟
+        }
+        
+        // 兑换按钮点击事件
+        document.getElementById('swap-button').addEventListener('click', function() {
+            alert('兑换功能即将上线，敬请期待！');
+        });
+        
+        // 表单提交事件
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('您的询价已发送，我们将尽快与您联系！');
+            this.reset();
+        });
+        
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', function() {
+            startPriceUpdates();
+            initPriceChart();
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80, // 考虑导航栏高度
+                            behavior: 'smooth'
+                        });
+                        
+                        // 关闭移动菜单（如果打开）
+                        if (!mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
